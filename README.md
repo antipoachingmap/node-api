@@ -1,6 +1,3 @@
-# django-app
-A django backend for AntiPoachingMap
-
 # Antipoaching
 
 The antipoaching project (needs a sexy name) seeks to make it easier to report and view antipoaching events as they occur.
@@ -12,7 +9,7 @@ Each request must supply authentication credentials with the header parameter li
 
 Note that we'll manage user access manually (for added security). So there are no endpoints for user registration.
 
-### Get an Auth Token [GET]
+### Get an Auth Token [POST]
 + Attributes
     + username (string) - The user's username
     + password (string) - The user's password
