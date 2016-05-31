@@ -1,0 +1,30 @@
+{
+  "name": "antipoaching-api",
+  "version": "1.0.0",
+  "description": "The antipoaching project (needs a sexy name) seeks to make it easier to report and view antipoaching events as they occur. This API defines how to ingest and view data in the system.",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/antipoachingmap/node-api.git"
+  },
+  "author": "Mike Hayden <mickyginger@gmail.com> (https://github.com/mickyginger)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/antipoachingmap/node-api/issues"
+  },
+  "homepage": "https://github.com/antipoachingmap/node-api#readme",
+  "dependencies": {
+    "bcrypt": "^0.8.6",
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "mongoose": "^4.4.19",
+    "morgan": "^1.7.0"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "supertest": "^1.2.0"
+  }
+}
