@@ -1,12 +1,13 @@
+process.env.NODE_ENV = 'test';
+
 var should = require('chai').should();
 var expect = require('chai').expect;
 var request = require('supertest');
 var app = require('../app');
 var Event = require('../models/Event');
 var User = require('../models/User');
-var mongoose = require('mongoose');
 
-var u;
+var authToken = (new Buffer('test@test.com:test').toString('base64'));
 
 after(function(done) {
   User.collection.drop();
@@ -18,11 +19,9 @@ beforeEach(function(done) {
   User.collection.drop();
   User.create({
     email: 'test@test.com',
-    password: 'test'
-  }, function(err, user) {
-    u = user;
-    done(err);
-  });
+    password: 'test',
+    passwordConfirmation: 'test'
+  }, done);
 });
 
 describe('GET /v1/events', function() {
@@ -30,7 +29,7 @@ describe('GET /v1/events', function() {
     request(app)
       .get('/v1/events')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .expect(200, done);
   });
 
@@ -38,7 +37,7 @@ describe('GET /v1/events', function() {
     request(app)
       .get('/v1/events')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .end(function(err, res) {
         expect(res.body).to.be.an('array');
         done();
@@ -51,7 +50,7 @@ describe('POST /v1/events', function() {
     request(app)
       .post('/v1/events')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "Seven elephants and a lion found dead",
         severity: "critical",
@@ -70,7 +69,7 @@ describe('POST /v1/events', function() {
     request(app)
       .post('/v1/events')
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "Seven elephants and a lion found dead",
         severity: "critical",
@@ -123,7 +122,7 @@ describe('GET /v1/events/:id', function() {
     request(app)
       .get('/v1/events/' + e._id)
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .expect(200, done);
   });
 
@@ -131,7 +130,7 @@ describe('GET /v1/events/:id', function() {
     request(app)
       .get('/v1/events/' + e._id)
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .end(function(err, res) {
         expect(res.body).to.be.an('object');
         expect(res.body.description).to.equal("Seven elephants and a lion found dead");
@@ -173,7 +172,7 @@ describe('PUT /v1/events/:id', function() {
     request(app)
       .put('/v1/events/' + e._id)
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "Seven elephants and a lion found partying",
         severity: "info",
@@ -192,7 +191,7 @@ describe('PUT /v1/events/:id', function() {
     request(app)
       .put('/v1/events/' + e._id)
       .set('Accept', 'application/json')
-      .set('Authorization', 'Basic ' + (new Buffer('test@test.com:test').toString('base64')))
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "Seven elephants and a lion found partying",
         severity: "info",

@@ -8,8 +8,8 @@ function secureRoute(req, res, done) {
 
   var authData = new Buffer(req.headers.authorization.split(' ')[1], 'base64').toString().split(':');
 
-  User.findOne({ email: authData[0], password: authData[1] }).exec(function(err, user) {
-    if(err || !user) return res.sendStatus(401);
+  User.findOne({ email: authData[0] }).exec(function(err, user) {
+    if(err || !user || !user.validatePassword(authData[1])) return res.sendStatus(401);
     done();
   });
 }

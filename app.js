@@ -1,24 +1,24 @@
 var express = require('express');
-var morgan = require('morgan');
 var mongoose = require('mongoose');
 var bodyParser = require('body-parser');
 
 var app = express();
-var PORT = process.env.PORT || 8000;
 var router = require('./config/routes');
-var db = require('./config/database');
+var config = require('./config/env/' + (process.env.NODE_ENV || 'development'));
 
-mongoose.connect(db.uri);
+var port = process.env.PORT || config.port;
 
-if(process.env.NODE_ENV !== 'test') app.use(morgan('dev'));
+var logger = require('./config/logger')(app);
+
+mongoose.connect(process.env.MONGO_URI || config.mongoUri);
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.use('/v1', router);
 
-app.listen(PORT, function() {
-  console.log('Express is listening on port: ' + PORT);
+app.listen(port, function() {
+  logger.info('Express is listening on port: ' + port);
 });
 
 module.exports = app;

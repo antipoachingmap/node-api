@@ -1,13 +1,26 @@
+process.env.NODE_ENV = 'test';
+
 var should = require('chai').should();
 var expect = require('chai').expect;
 var request = require('supertest');
 var app = require('../app');
 var Media = require('../models/Media');
-var mongoose = require('mongoose');
+var User = require('../models/User');
+
+var authToken = (new Buffer('test@test.com:test').toString('base64'));
 
 after(function(done) {
   Media.collection.drop();
   done();
+});
+
+beforeEach(function(done) {
+  User.collection.drop();
+  User.create({
+    email: 'test@test.com',
+    password: 'test',
+    passwordConfirmation: 'test'
+  }, done);
 });
 
 describe('GET /v1/media', function() {
@@ -15,6 +28,7 @@ describe('GET /v1/media', function() {
     request(app)
       .get('/v1/media')
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .expect(200, done);
   });
 
@@ -22,6 +36,7 @@ describe('GET /v1/media', function() {
     request(app)
       .get('/v1/media')
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .end(function(err, res) {
         expect(res.body).to.be.an('array');
         done();
@@ -34,6 +49,7 @@ describe('POST /v1/media', function() {
     request(app)
       .post('/v1/media')
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .send({
           description: "A party parrot",
           format: "png",
@@ -48,6 +64,7 @@ describe('POST /v1/media', function() {
     request(app)
       .post('/v1/media')
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .send({
           description: "A party parrot",
           format: "png",
@@ -90,6 +107,7 @@ describe('GET /v1/media/:id', function() {
     request(app)
       .get('/v1/media/' + e._id)
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .expect(200, done);
   });
 
@@ -97,6 +115,7 @@ describe('GET /v1/media/:id', function() {
     request(app)
       .get('/v1/media/' + e._id)
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .end(function(err, res) {
         expect(res.body).to.be.an('object');
         expect(res.body.description).to.equal("A party parrot");
@@ -132,6 +151,7 @@ describe('PUT /v1/media/:id', function() {
     request(app)
       .put('/v1/media/' + e._id)
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "A party pangolin",
         format: "png",
@@ -146,6 +166,7 @@ describe('PUT /v1/media/:id', function() {
     request(app)
       .put('/v1/media/' + e._id)
       .set('Accept', 'application/json')
+      .set('Authorization', 'Basic ' + authToken)
       .send({
         description: "A party pangolin",
         format: "png",
